@@ -4,7 +4,7 @@ After cloning, please follow these:
 
 ## Database setup
 
-On the project folder, update ```.env``` file.
+On the project folder, update ```.env``` file. To match the database locally.
 
 ```sh
 DB_CONNECTION=
@@ -14,7 +14,7 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
-After the Database connection setup, verify if can connect successfully.
+After the Database connection setup, verify if can connect successfully using this command.
 ```sh
 php artisan migrate
 ```
@@ -24,13 +24,19 @@ php artisan migrate
 ```sh
 crontab -e
 ```
-2. Add the following line to your crontab file:
+2. Add the following line to your crontab file (_/raw-email/extractor is where the file is located_):
 ```sh
-successful-emails
+* * * * * php /raw-email/extractor schedule:run >> /dev/null 2>&1
 ```
 After the Cron job setup, verify if it works successfully.
 ```sh
 php artisan emails:extract-email
+```
+
+## Program running/deployment
+To run the program. Go to the project folder and input this command
+```sh
+php artisan serve
 ```
 
 ## API Endpoints
@@ -63,7 +69,7 @@ This endpoint will fetch a single record by ID.
 GET /successful-emails/getEmailById/{id}
 ```
 
-Update
+Update By ID
 This endpoint will update a single record based on the ID passed.
 ```sh
 PUT successful-emails/updateEmail/{id}
@@ -96,4 +102,10 @@ Delete by ID
 This endpoint will delete a record based on the ID passed. The delete should only be a soft delete and should not erase data from the database.
 ```sh
 DELETE /successful-emails/deleteEmailById/{id}
+```
+
+Get CSRF Token
+This endpoint will return a CSRF token to add on the headers for these API endpoints: Delete by ID, Update By ID and Store
+```sh
+GET /csrf-token
 ```
